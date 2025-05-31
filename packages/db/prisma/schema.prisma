@@ -16,18 +16,18 @@ datasource db {
 model User {
   id       String  @id @default(cuid()) @map("_id")
   username String  @unique
-  password String  @unique
-  avatarId String
+  password String
+  avatarId String?
   role     Role
   spaces   Space[]
-  avatar   Avatar  @relation(fields: [avatarId], references: [id])
+  avatar   Avatar? @relation(fields: [avatarId], references: [id])
 }
 
 model Space {
   id        String          @id @default(cuid()) @map("_id")
   name      String
   width     Int
-  height    Int?
+  height    Int
   thumbnail String?
   creatorId String
   creator   User            @relation(fields: [creatorId], references: [id])
@@ -49,24 +49,26 @@ model Element {
   width         Int
   height        Int
   imageUrl      String
+  static        Boolean
   spaceElements spaceElements[]
   mapElements   mapElements[]
 }
 
 model Map {
-  id       String        @id @default(cuid()) @map("_id")
-  width    Int
-  height   Int
-  name     String
-  elements mapElements[]
+  id        String        @id @default(cuid()) @map("_id")
+  width     Int
+  height    Int
+  name      String
+  thumbnail String
+  elements  mapElements[]
 }
 
 model mapElements {
   id        String  @id @default(cuid()) @map("_id")
   mapId     String
   elementId String
-  x         Int?
-  y         Int?
+  x         Int
+  y         Int
   map       Map     @relation(fields: [mapId], references: [id])
   element   Element @relation(fields: [elementId], references: [id])
 }
