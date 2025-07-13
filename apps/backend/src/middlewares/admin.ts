@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config";
 import { NextFunction, Request, Response } from "express";
 
 export const adminMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const JWT_SECRET = process.env.JWT_SECRET_ADMIN;
   const header = req.headers["authorization"];
   const token = header?.split(" ")[1];
 
@@ -12,13 +12,14 @@ export const adminMiddleware = (req: Request, res: Response, next: NextFunction)
   }
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET || "default_secret") as { userId: string, role: string };
-        
-        if (decoded.role !== "Admin") {
-            res.status(403).json({ message: "Forbidden" });
-            return;
-        }
-        req.userId = decoded.userId; 
+      const decoded = jwt.decode(token) as { userId: string, role: string };
+      if (decoded.role !== "Admin") {
+          res.status(403).json({ message: "Forbidden" });
+          return;
+      }
+        const verified = jwt.verify(token, JWT_SECRET || "default_secret") as { userId: string, role: string };
+        console.log("Admin middleware", process.env.JWT_SECRET_ADMIN);
+        req.userId = verified.userId; 
         req.role = "Admin" 
         next();
     }

@@ -6,9 +6,9 @@ import { router as spaceRouter } from "./space";
 import { router as adminRouter } from "./admin";
 import { SignInSchema, SignUpSchema } from "../../types";
 import client from "@repo/db/client"; 
-import { JWT_SECRET } from "../../config";
 
 export const router = Router();
+
 
 router.post("/signup", async (req, res) => {
 
@@ -38,6 +38,7 @@ router.post("/signup", async (req, res) => {
     });
     
   } catch (error) {
+    console.error("Error creating user:", error);
 
     res.status(500).json({
       message: "User already exists",
@@ -81,9 +82,19 @@ router.post("/signin", async (req, res) => {
       return;
     }
 
+    let secret = "default_secret";
+    if (user.role === "Admin") {
+      secret = process.env.JWT_SECRET_ADMIN || "default_admin_secret";
+      console.log("Admin user signing in", process.env.JWT_SECRET_ADMIN);
+    } else {
+      secret = process.env.JWT_SECRET_USER || "default_user_secret";
+      console.log("user signing in", process.env.JWT_SECRET_USER);
+
+    }
     const token = jwt.sign(
-      { userId: user.id, role: user.role }, JWT_SECRET || "default_secret",
-    )
+      { userId: user.id, role: user.role },
+      secret
+    );
 
     res.json({
       token: token,
@@ -91,6 +102,7 @@ router.post("/signin", async (req, res) => {
     });
     
   } catch (error) {
+    console.error("Error signing in user:", error);
     res.status(500).json({
       message: "Internal server error",});
   }
@@ -141,6 +153,13 @@ router.get("/elements", async (req, res) => {
   return;
     
   });
+
+router.get("/check", (req,res) => {
+  res.json({
+    message: "API is working",
+  });
+  return;
+})
 
 router.use("/user", userRouter);
 router.use("/space", spaceRouter);

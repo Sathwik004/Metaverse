@@ -38,3 +38,6 @@ yarn-error.log*
 *.pem
 
 apps/http/src/config.ts
+apps/ws/src/config.ts
+
+.env.*

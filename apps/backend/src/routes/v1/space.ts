@@ -297,6 +297,30 @@ router.post("/element", userMiddleware, async (req, res) => {
             });
             return;
         }
+        if (parsedData.data.x == 0 || parsedData.data.y == 0) {
+            res.status(400).json({
+                message: "Element position cannot be (0,0) this is the spawn point",
+            });
+            return;
+        }
+
+        const existingElement = await client.spaceElements.findFirst({
+            where: {
+                x: parsedData.data.x,
+                y: parsedData.data.y,
+                spaceId: parsedData.data.spaceId,
+            },
+            select: {
+                id: true,
+            }
+        });
+
+        if (existingElement) {
+            res.status(400).json({
+                message: "Element already exists at this position",
+            });
+            return;
+        }
 
         const element = await client.spaceElements.create({
             data: {

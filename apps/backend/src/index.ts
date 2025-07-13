@@ -1,6 +1,5 @@
 import express from "express";
 import { router } from "./routes/v1";
-import client from "@repo/db/client";
 // If you see "Cannot find module '@repo/db'", make sure:
 // 1. The @repo/db package exists in your turborepo (e.g., in /packages/db).
 // 2. The package.json in @repo/db has a "name": "@repo/db" field.
@@ -13,8 +12,14 @@ import client from "@repo/db/client";
 const app = express();
 
 app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 app.use("/api/v1", router);
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`Server is running on port ${process.env.PORT || 5000}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Server is running on port ${process.env.PORT || 3000}`);
 });

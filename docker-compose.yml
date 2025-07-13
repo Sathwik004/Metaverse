@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres
+    container_name: DBcontainer
+    ports:
+      - "5432:5432"
+    volumes:
+      - metaverse:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: newdb
+
+  backend:
+    container_name: httpContaineer
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile.backend.dev
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./apps/backend/.env
+    environment:
+      - JWT_SECRET_ADMIN=${JWT_SECRET_ADMIN}
+      - JWT_SECRET_USER=${JWT_SECRET_USER}
+      - DATABASE_URL=${DATABASE_URL}
+    depends_on:
+      - postgres
+  ws:
+    container_name: wsContainer
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile.ws.dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  metaverse:
