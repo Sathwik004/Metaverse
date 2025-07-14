@@ -33,6 +33,10 @@ services:
       dockerfile: ./docker/Dockerfile.ws.dev
     ports:
       - "8080:8080"
+    env_file:
+      - ./apps/ws/.env
+    environment:
+      - JWT_SECRET=${JWT_SECRET_USER}
     depends_on:
       - postgres
 

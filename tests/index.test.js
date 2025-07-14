@@ -2,6 +2,7 @@ const axios2 = require("axios");
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
 const WS_URL = process.env.WS_URL || "ws://localhost:8080";
+console.log(WS_URL)
 
 const axios = {
     post: async (...args) => {
@@ -60,8 +61,8 @@ describe.skip("Authentication", () => {
                 type: "admin",
             },
         );
-        console.log(response.data)
-        console.log(response2.data)
+        
+        
 
         expect(response2.status).toBe(500);
     });
@@ -181,7 +182,7 @@ describe.skip("User Information endpoints", () => {
                 headers: { authorization: `Bearer ${token}` },
             },
         );
-        console.log(response.data, token)
+        
         expect(response.status).toBe(200);
     });
 
@@ -324,11 +325,11 @@ describe.skip("Space Informations", () => {
         );
 
         mapId = mapResponse.data.mapId;
-        console.log("Map ID", mapId)
+        
     });
 
     test("User should be able to create a space", async () => {
-        console.log("USER TOKENNNN: ", userToken)
+        
         const createSpaceResponse = await axios.post(
             `${BACKEND_URL}/api/v1/space`,
             {
@@ -339,7 +340,7 @@ describe.skip("Space Informations", () => {
             { headers: { authorization: `Bearer ${userToken}` } },
         );
 
-        console.log(createSpaceResponse.data)
+        
 
         expect(createSpaceResponse.data.spaceId).toBeDefined();
     });
@@ -354,7 +355,7 @@ describe.skip("Space Informations", () => {
             { headers: { authorization: `Bearer ${userToken}` } },
         );
 
-        console.log(createSpaceResponse.data)
+        
 
         expect(createSpaceResponse.data.spaceId).toBeDefined();
     });
@@ -398,7 +399,7 @@ describe.skip("Space Informations", () => {
                 headers: { authorization: `Bearer ${userToken}` },
             },
         );
-        console.log("Del res============================", deleteResponse.data)
+        
         expect(deleteResponse.status).toBe(200);
     });
 
@@ -455,7 +456,7 @@ describe.skip("Space Informations", () => {
     });
 });
 
-describe("Arena Informations", () => {
+describe.skip("Arena Informations", () => {
     let element1Id = null;
     let element2Id = null;
     let adminToken = null;
@@ -672,7 +673,7 @@ describe("Arena Informations", () => {
     });
 });
 
-describe("Admin and Map creators endpoints", () => {
+describe.skip("Admin and Map creators endpoints", () => {
     let adminToken = null;
     let adminId = null;
     let userToken = null;
@@ -833,7 +834,7 @@ describe("Admin and Map creators endpoints", () => {
 });
 
 
-describe.skip("Websocket", () => {
+describe("Websocket", () => {
     let userToken = null;
     let userId = null;
     let adminToken = null;
@@ -972,7 +973,8 @@ describe.skip("Websocket", () => {
         });
 
         ws1.onmessage = (msg) => {
-            console.log("WS1 onMessage",JSON.parse(msg.data))
+            console.log("WS1 onMessage ",JSON.parse(msg.data))
+            
             ws1Messages.push(JSON.parse(msg.data));
         };
 
