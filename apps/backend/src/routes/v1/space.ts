@@ -16,6 +16,18 @@ router.post("/", userMiddleware, async (req, res) => {
     }
 
     try {
+        const existingSpace = await client.space.findFirst({
+            where: {
+                creatorId: req.userId!,
+            },
+        });
+        if (existingSpace) {
+            res.status(400).json({
+                message: "You have already created a space. Maximum allowed is 1.",
+            });
+            return;
+        }
+
         if (!parsedData.data.mapId){
         const space = await client.space.create({
             data: {

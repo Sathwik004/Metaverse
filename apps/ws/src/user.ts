@@ -56,6 +56,13 @@ export class User {
                     this.userId = userId;
                     this.spaceId = spaceId;
 
+                    if ((RoomManager.getInstance().rooms.get(spaceId)?.length ?? 0) >= 3){
+                        this.send({
+                            type: "user-rejected"
+                        })
+                        return;
+                    }
+
                     RoomManager.getInstance().addUserToRoom(this.spaceId!, this);
                     this.send({
                         type: "space-joined",
@@ -64,17 +71,16 @@ export class User {
                                 x: this.x,
                                 y: this.y,
                             },
-                        users: RoomManager.getInstance().rooms.get(spaceId)?.filter(x => x.id !== this.id)?.map((u) => ({id: u.id})) ?? []
-                    },
+                            userid: this.id},
                         users: RoomManager.getInstance().rooms.get(this.spaceId!)?.
                         filter((u) => u.userId !== this.userId).
-                        map((u) => ({id: u.id})) ?? []
+                        map((u) => ({id: u.id, x: u.x, y: u.y})) ?? []
                     });
 
                     RoomManager.getInstance().broadcastMessage({
                         type: "user-joined",
                         payload: {
-                            userId: this.userId,
+                            userId: this.id,
                             x: this.x,
                             y: this.y,
                         },
@@ -148,7 +154,7 @@ export class User {
                             payload: {
                                 x: this.x,
                                 y: this.y,
-                                userId: this.userId,
+                                userId: this.id,
                             },
                         }, this.spaceId, this);
                     } else {
@@ -176,7 +182,7 @@ export class User {
         RoomManager.getInstance().broadcastMessage({
             type: "user-left",
             payload: {
-                userId: this.userId,
+                userId: this.id,
             },
         }, this.spaceId!, this);
         RoomManager.getInstance().removeUserFromRoom(this.spaceId!, this);

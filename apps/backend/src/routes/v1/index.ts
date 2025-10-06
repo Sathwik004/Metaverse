@@ -6,6 +6,7 @@ import { router as spaceRouter } from "./space";
 import { router as adminRouter } from "./admin";
 import { SignInSchema, SignUpSchema } from "../../types";
 import client from "@repo/db/client"; 
+// import { serialize } from "cookie";
 
 export const router = Router();
 
@@ -96,6 +97,15 @@ router.post("/signin", async (req, res) => {
       secret
     );
 
+    // res.setHeader("Set-Cookie", serialize("auth_token", token, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: "none",
+    //   path: "/",
+    //   maxAge: 7 * 24 * 60 * 60,
+    // }));
+    // console.log("Set-Cookie header:", res.getHeader("Set-Cookie"));
+
     res.json({
       token: token,
       message: "User signed in successfully"
@@ -108,6 +118,19 @@ router.post("/signin", async (req, res) => {
   }
   return;    
   });
+
+router.post("/signout", (req, res) => {
+  // res.setHeader("Set-Cookie", serialize("auth_token", "", {
+  //   httpOnly: true,
+  //   secure: true,
+  //   sameSite: "none",
+  //   path: "/",
+  //   expires: new Date(0), // Expire the cookie immediately
+  // }));
+  // console.log(res.getHeader)
+  res.json({ message: "User signed out successfully" });
+  return;
+});
 
 router.get("/avatars", async (req, res) => {
   try {

@@ -18,3 +18,12 @@ wss.on('connection', function connection(ws) {
   });
 
 });
+
+setInterval(() => {
+  console.log('🔄 Server-wide reset: disconnecting all clients...');
+  wss.clients.forEach(ws => {
+    if (ws.readyState === ws.OPEN) {
+      ws.close(4000, 'Server reset — please reconnect.');
+    }
+  });
+}, 2 * 1000);

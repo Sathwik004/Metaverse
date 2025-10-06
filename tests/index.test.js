@@ -39,7 +39,7 @@ const axios = {
     },
 }
 
-describe.skip("Authentication", () => {
+describe("Authentication", () => {
     test("User is able to sign up and only once", async () => {
         const username = "testuser" + Math.random();
         const password = "pass1234";
@@ -122,7 +122,7 @@ describe.skip("Authentication", () => {
     });
 });
 
-describe.skip("User Information endpoints", () => {
+describe("User Information endpoints", () => {
     let token = null;
     let username = `testuserr-${Math.random()}`;
     let password = "pass1234";
@@ -217,7 +217,7 @@ describe.skip("User Information endpoints", () => {
     });
 });
 
-describe.skip("Space Informations", () => {
+describe("Space Informations", () => {
     let element1Id = null;
     let element2Id = null;
     let adminToken = null;
@@ -456,7 +456,7 @@ describe.skip("Space Informations", () => {
     });
 });
 
-describe.skip("Arena Informations", () => {
+describe("Arena Informations", () => {
     let element1Id = null;
     let element2Id = null;
     let adminToken = null;
@@ -673,7 +673,7 @@ describe.skip("Arena Informations", () => {
     });
 });
 
-describe.skip("Admin and Map creators endpoints", () => {
+describe("Admin and Map creators endpoints", () => {
     let adminToken = null;
     let adminId = null;
     let userToken = null;

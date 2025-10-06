@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { router } from "./routes/v1";
 // If you see "Cannot find module '@repo/db'", make sure:
 // 1. The @repo/db package exists in your turborepo (e.g., in /packages/db).
@@ -11,15 +12,22 @@ import { router } from "./routes/v1";
 
 const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:3000', // frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // if you use cookies or credentials
+}));
+
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
+  console.log(`${req.method} ${req.url} hehe`);
+  // Check and print cookies sent by the client
   next();
 });
 
 app.use("/api/v1", router);
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server is running on port ${process.env.PORT || 3000}`);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server is running on port ${process.env.PORT || 5000}`);
 });

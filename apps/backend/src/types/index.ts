@@ -29,8 +29,10 @@ export const GetBulkMetadataSchema = z.object({
 
 export const CreateSpaceSchema = z.object({
   name: z.string().min(1),
-  // Dimesions as a string 100x100
-  dimensions: z.string().regex(/^[0-9]{1,4}x[0-9]{1,4}$/),
+  // Dimensions as a string, minimum 10x10
+  dimensions: z.string().regex(/^(?:[1-9][0-9]|100)x(?:[1-9][0-9]|100)$/, {
+    message: "dimensions must be in the format 'WxH' where W and H are between 10 and 100",
+  }),
   mapId: z.string().optional(),
 })
 
