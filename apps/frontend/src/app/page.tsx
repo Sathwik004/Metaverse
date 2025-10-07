@@ -15,14 +15,19 @@ export default function Home() {
       </div>
       <div className="relative flex justify-center items-center">
         <Cube />
-        <div className="absolute top-50">
+        <div className="absolute top-50 h-auto">
           <h1 className="w-full text-center">
             Welcome to Metaverse
           </h1>
           <p className="text-center m-10">Connect, explore and interact in real-time rooms.</p>
-          <Link href="/join" className="w-full flex justify-center mt-20">
-            <Button variant={"outline"} className="text-3xl font-medium font-sane py-8 px-20">Join Space</Button>
-          </Link>
+          <div className="flex justify-center">
+            <Link href="/join" className="w-100 flex justify-center mt-10 mx-5">
+              <Button variant={"outline"} className="w-full text-3xl font-medium font-sane py-8">Join Space</Button>
+            </Link>
+            <Link href="/dashboard" className="w-100 flex justify-center mt-10 mx-5">
+              <Button variant={"outline"} className="w-full text-3xl font-medium font-sane py-8">Open Dashboard</Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

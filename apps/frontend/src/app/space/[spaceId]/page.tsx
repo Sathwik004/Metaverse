@@ -13,6 +13,8 @@ export default function DashboardPathPage() {
     const spaceIdParam = params.spaceId;
     const router = useRouter()
 
+
+
     // User data structure
     interface User {
         id: string;
@@ -29,6 +31,24 @@ export default function DashboardPathPage() {
         y: 0,
     });
     const spaceId = Array.isArray(spaceIdParam) ? spaceIdParam[0] : spaceIdParam;
+
+    useEffect(() => {
+        const token = localStorage.getItem("auth_token");
+        if (!token) {
+            router.push("/auth");
+        }
+
+        if (spaceId) {
+            (async () => {
+                const spaceData = await getspace(spaceId);
+                setSpace(spaceData.space);
+            })();
+        }
+        else {
+            alert("Unable to find Space id")
+            router.push("/")
+        }
+    }, []);
 
     const wsRef = useRef<WebSocket | null>(null);
 
@@ -86,12 +106,7 @@ export default function DashboardPathPage() {
         const ws = new WebSocket(WS); // Adjust server URL if needed
         wsRef.current = ws;
 
-        if (spaceId) {
-            (async () => {
-                const spaceData = await getspace(spaceId);
-                setSpace(spaceData.space);
-            })();
-        }
+
 
         ws.onopen = () => {
             const token = localStorage.getItem('auth_token')
